@@ -1,0 +1,16 @@
+version: '2.3'
+
+services:
+
+  aerospike-db:
+    image: aerospike:4.0.0.4
+
+  openresty:
+    build:
+      context: .
+      dockerfile: docker/openresty/Dockerfile
+    volumes:
+      - ./lua:/var/www/lua
+      - ./docker/openresty/nginx/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
+    ports:
+      - 127.0.0.1:8006:80
