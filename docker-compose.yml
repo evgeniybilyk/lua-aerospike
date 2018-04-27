@@ -10,7 +10,7 @@ services:
       context: .
       dockerfile: docker/openresty/Dockerfile
     volumes:
-      - ./lua:/var/www/lua
+      - ./tmp:/tmp
       - ./docker/openresty/nginx/nginx.conf:/usr/local/openresty/nginx/conf/nginx.conf
     ports:
       - 127.0.0.1:8006:80

@@ -2,9 +2,11 @@ FROM openresty/openresty:1.11.2.2-jessie
 
 RUN apt-get update
 RUN apt-get install -y --no-install-recommends \
+    apt-file \
     luarocks \
     libssl-dev \
-#    dnsmasq \
+    liblua5.1-0-dev liblua5.2-dev liblua50-dev libluajit-5.1-dev \
+    dnsmasq \
     git \
     systemtap
 
@@ -33,6 +35,10 @@ RUN cd /tmp && \
     git clone https://github.com/doujiang24/lua-resty-kafka.git && \
     cd lua-resty-kafka && \
     make install
+
+RUN cd /tmp && \
+    git clone https://github.com/aerospike/aerospike-client-c.git && \
+    cd aerospike-client-c
 
 RUN cd /tmp && \
     git clone https://github.com/aerospike/client-lua.git && \
