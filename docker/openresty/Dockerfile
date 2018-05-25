@@ -4,7 +4,12 @@ RUN apt-get update
 RUN apt-get install -y --no-install-recommends \
     apt-file \
     luarocks \
+    libc6-dev \
     libssl-dev \
+    g++ \
+    libtool \
+    automake \
+    autoconf \
     liblua5.1-0-dev liblua5.2-dev liblua50-dev libluajit-5.1-dev \
     dnsmasq \
     git \
@@ -27,23 +32,14 @@ RUN cd && git clone https://github.com/openresty/openresty-systemtap-toolkit.git
 RUN cd && git clone https://github.com/openresty/stapxx.git
 
 RUN cd /tmp && \
-    git clone https://github.com/wingify/lua-resty-rabbitmqstomp.git && \
-    cd lua-resty-rabbitmqstomp && \
-    make install
-
-RUN cd /tmp && \
-    git clone https://github.com/doujiang24/lua-resty-kafka.git && \
-    cd lua-resty-kafka && \
-    make install
-
-RUN cd /tmp && \
     git clone https://github.com/aerospike/aerospike-client-c.git && \
-    cd aerospike-client-c
+    cd aerospike-client-c && git submodule update --init && \
+    make EVENT_LIB=libuv && make clean && make EVENT_LIB=libuv test && make install
 
-RUN cd /tmp && \
-    git clone https://github.com/aerospike/client-lua.git && \
-    cd client-lua && \
-    ./build_linux.sh
+#RUN cd /tmp && \
+#    git clone https://github.com/aerospike/client-lua.git && \
+#    cd client-lua && \
+#    ./build_linux.sh
 
 RUN sed -i '/http {/ a\ include conf.d/*;' /usr/local/openresty/nginx/conf/nginx.conf && \
     mkdir -p /usr/local/openresty/nginx/conf/conf.d && \
